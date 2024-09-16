@@ -48,6 +48,7 @@ internal class Program
             var cores = Environment.ProcessorCount;
             MaxThreads = cores * 2;
         }
+        SetupEventlog();
         StartLoggingEngine();
         HttpListener listener = new HttpListener();
         listener.Prefixes.Add("http://localhost:8080/");
