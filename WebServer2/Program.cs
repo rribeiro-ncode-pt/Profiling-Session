@@ -205,6 +205,7 @@ internal class Program
         if (OperatingSystem.IsWindows())
         {
             EventLog eventLog = new EventLog("Application");
+            eventLog.Source = "WebServer";
             eventLog.WriteEntry(errorMessage, EventLogEntryType.Error);
         }
         Console.WriteLine(errorMessage);

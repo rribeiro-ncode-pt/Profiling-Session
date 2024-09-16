@@ -55,7 +55,7 @@ internal class Program
         listener.Realm = "localhost";
         listener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
         listener.Start();
-        Console.WriteLine($"Serving files from D:\\wwwroot\\ at http://localhost:8080/ with {MaxThreads} WORK THREAD - SYNC IO - CLEAR BUFFER");
+        Console.WriteLine($"Serving files from D:\\wwwroot\\ at http://localhost:8080/ with {MaxThreads} WORK THREAD - SYNC IO");
 
         for (int i = 0; i < MaxThreads; i++)
         {
@@ -279,6 +279,7 @@ internal class Program
         if (OperatingSystem.IsWindows())
         {
             EventLog eventLog = new EventLog("Application");
+            eventLog.Source = "WebServer";
             eventLog.WriteEntry(errorMessage, EventLogEntryType.Error);
         }
         Console.WriteLine(errorMessage);
