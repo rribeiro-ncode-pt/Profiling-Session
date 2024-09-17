@@ -24,7 +24,7 @@ The solution consists of several components:
 
 ### WebServer Implementations
 
-The original developer of this prototype doesn't believe in config files, all setting are hardcoded. All the versions serve anything inside `(C:\wwwroot\)` as long as it is static and the ContentType is one of these:
+The original developer of this prototype doesn't believe in config files, all setting are hardcoded. All the versions serve anything inside `(D:\wwwroot\)` as long as it is static and the ContentType is one of these:
 **.htm**, **.html**: `text/html`
 **.css**: `text/css`
 **.js**: `application/javascript`

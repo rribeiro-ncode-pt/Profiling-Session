@@ -15,7 +15,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClientLoad", "ClientLoad\Cl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebServer5", "WebServer5\WebServer5.csproj", "{1EBA19FD-B07A-405F-A7CF-AB7BFFED97ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPageGenerator", "StockPageGenerator\StockPageGenerator.csproj", "{BC1D6F40-FAED-45D0-8012-32015A7C0BD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockPageGenerator", "StockPageGenerator\StockPageGenerator.csproj", "{BC1D6F40-FAED-45D0-8012-32015A7C0BD6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{26228699-5A1E-4DF3-86F9-342B88E334BD}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
