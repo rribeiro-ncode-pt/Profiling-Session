@@ -100,14 +100,14 @@ class Program
                     if (new Date(stock.LastUpdated) > new Date(Date.now() - 2000)) {
                         let variationColor = stock.Variation >= 0 ? 'text-success' : 'text-danger';
                         let variationArrow = stock.Variation >= 0 ? '▲' : '▼';
-                        row.find('.price').text(`${stock.Price.toFixed(2)} USD`).addClass('bg-warning');
+                        row.find('.price').text(`${stock.Price.toFixed(2)} USD`).addClass('bg-info text-white');
                         row.find('.variation').html(`${variationArrow} ${Math.abs(stock.Variation).toFixed(2)}%`)
                             .removeClass('text-success text-danger').addClass(variationColor);
-                        row.find('.volume').text(stock.Volume.toLocaleString()).addClass('bg-warning');
+                        row.find('.volume').text(stock.Volume.toLocaleString()).addClass('bg-info text-white');
                         
                         // Remove highlighting after a short delay
                         setTimeout(() => {
-                            row.find('.price, .volume').removeClass('bg-warning');
+                            row.find('.price, .volume').removeClass('bg-info text-white');
                         }, 1000);
                     }
                 });
