@@ -32,6 +32,7 @@ internal class Program
         FileCache.TryRemove(e.FullPath, out _);
     }
 
+    //MAIN ------------------------------------------------------------------------------------------------------
     private static async Task Main(string[] args)
     {
         SetupEventlog();
@@ -49,6 +50,7 @@ internal class Program
             _ = Task.Run(() => ProcessRequest(context));
         }
     }
+    //END MAIN --------------------------------------------------------------------------------------------------
 
     private static async Task ProcessRequest(HttpListenerContext context)
     {

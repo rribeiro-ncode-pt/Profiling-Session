@@ -37,6 +37,7 @@ internal class Program
         FileCache.TryRemove(e.FullPath, out _);
     }
 
+    //MAIN ------------------------------------------------------------------------------------------------------
     private static void Main(string[] args)
     {
         if (args.Length > 0 && int.TryParse(args[0], out int maxThreads))
@@ -90,6 +91,7 @@ internal class Program
         listener.Stop();
         RequestQueue.CompleteAdding();
     }
+    //END MAIN --------------------------------------------------------------------------------------------------
 
     private static void ProcessRequests()
     {
@@ -157,7 +159,6 @@ internal class Program
         finally
         {
             response.OutputStream.Close();
-            stopwatch.Reset();
             stopwatch.Stop();
             Log(context.Request.RemoteEndPoint.Address.ToString(), "Anonymous", context.Request.HttpMethod, urlPath, context.Request.Url.Query, response.StatusCode, 0, 0, stopwatch.Elapsed.TotalMilliseconds);
         }

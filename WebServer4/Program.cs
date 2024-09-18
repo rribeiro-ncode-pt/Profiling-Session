@@ -36,6 +36,7 @@ internal class Program
         FileCache.TryRemove(e.FullPath, out _);
     }
 
+    //MAIN ------------------------------------------------------------------------------------------------------
     private static void Main(string[] args)
     {
         SetupEventlog();
@@ -90,6 +91,7 @@ internal class Program
         listener.Stop();
         RequestQueue.CompleteAdding();
     }
+    //END MAIN --------------------------------------------------------------------------------------------------
 
     private static void ProcessRequests()
     {
