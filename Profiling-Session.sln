@@ -24,9 +24,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebServer6", "WebServer6\WebServer6.csproj", "{D53260C3-BDD2-4750-918C-854B2056B7BF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandlerInterfaces", "HandlerInterfaces\HandlerInterfaces.csproj", "{04383E6E-B444-4DD7-B848-D0AA05936C92}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HandlerInterfaces", "HandlerInterfaces\HandlerInterfaces.csproj", "{04383E6E-B444-4DD7-B848-D0AA05936C92}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockQuotesAPI", "StockQuotesAPI\StockQuotesAPI.csproj", "{5608B586-C191-4CF7-A746-F03516E1B524}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockQuotesAPI", "StockQuotesAPI\StockQuotesAPI.csproj", "{5608B586-C191-4CF7-A746-F03516E1B524}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiddlewareInterfaces", "MiddlewareInterfaces\MiddlewareInterfaces.csproj", "{C26040BA-8985-4D00-AC9B-26D8CEE3794B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +76,10 @@ Global
 		{5608B586-C191-4CF7-A746-F03516E1B524}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5608B586-C191-4CF7-A746-F03516E1B524}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5608B586-C191-4CF7-A746-F03516E1B524}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C26040BA-8985-4D00-AC9B-26D8CEE3794B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C26040BA-8985-4D00-AC9B-26D8CEE3794B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C26040BA-8985-4D00-AC9B-26D8CEE3794B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C26040BA-8985-4D00-AC9B-26D8CEE3794B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

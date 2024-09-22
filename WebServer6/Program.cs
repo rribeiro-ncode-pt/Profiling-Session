@@ -15,6 +15,7 @@ using System.Linq;
 using System.Reflection;
 using System.IO.Compression;
 using HandlerInterfaces;
+using MiddlewareInterfaces;
 
 namespace WebServer6
 {
@@ -254,16 +255,6 @@ namespace WebServer6
                 }
             }
         }
-    }
-
-    interface IMiddleware
-    {
-        Task<bool> ProcessRequestAsync(HttpListenerContext context);
-    }
-
-    interface IConfigurableMiddleware : IMiddleware
-    {
-        void Configure(Dictionary<string, JsonElement> settings);
     }
 
     class RouteConfig
