@@ -34,7 +34,7 @@ class Program
         };
 
         string htmlContent = GenerateHtml();
-        File.WriteAllText("stock_data.html", htmlContent);
+        File.WriteAllText("stock_data2.html", htmlContent);
         Console.WriteLine("HTML file generated.");
 
         while (true)
@@ -76,9 +76,9 @@ class Program
 <head>
     <meta charset=""UTF-8"">
     <meta name=""viewport"" content=""width=device-width, initial-scale=1.0"">
-    <link href=""https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"" rel=""stylesheet"">
+    <link href=""/css/bootstrap.min.css"" rel=""stylesheet"">
     <title>NASDAQ Stock Quotes</title>
-    <script src=""https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js""></script>
+    <script src=""/js/jquery.min.js""></script>
     <script>
         function updateStockData() {
             $.getJSON('stock_data.json', function(data) {

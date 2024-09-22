@@ -81,7 +81,7 @@ internal class Program
                 FileCache[localPath] = content;
                 response.ContentType = GetContentType(localPath);
                 response.ContentLength64 = content.Length;
-                response.OutputStream.Write(content, 0, content.Length);
+                await response.OutputStream.WriteAsync(content, 0, content.Length);
             }
             else
             {

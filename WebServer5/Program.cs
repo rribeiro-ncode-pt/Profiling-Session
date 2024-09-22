@@ -131,7 +131,6 @@ internal class Program
                 string contentType = GetContentType(localPath);
                 response.ContentType = contentType;
                 response.ContentLength64 = content.Length;
-                // Add caching headers for images
                 if (contentType.StartsWith("image/"))
                 {
                     SetImageCacheHeaders(response);
@@ -142,6 +141,7 @@ internal class Program
             {
                 SendErrorResponse(response, HttpStatusCode.NotFound, "404 Not Found");
             }
+            response.Close();
         }
         catch (Exception ex)
         {
@@ -150,15 +150,16 @@ internal class Program
             try
             {
                 SendErrorResponse(response, HttpStatusCode.InternalServerError, "500 Internal Server Error");
+                response.Close();
             }
             catch (Exception ex2)
             {
+                response.Abort();
                 ReportError($"Error sending error response: {ex2.Message}");
             }
         }
         finally
         {
-            response.OutputStream.Close();
             stopwatch.Stop();
             Log(context.Request.RemoteEndPoint.Address.ToString(), "Anonymous", context.Request.HttpMethod, urlPath, context.Request.Url.Query, response.StatusCode, 0, 0, stopwatch.Elapsed.TotalMilliseconds);
         }

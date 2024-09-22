@@ -1,0 +1,53 @@
+{
+    "Port": 8080,
+    "HttpsPort": 8443,
+    "MaxThreads": 6,
+    "CertificatePath": "D:\\Profiling-Session\\Servers\\certificate.pfx",
+    "CertificatePassword": "AMinhaSuperPasswordMuitoSegura",
+    "RouteConfigs": [
+        {
+            "Path": "/*",
+            "Methods": [ "GET" ],
+            "HandlerType": "StaticFiles",
+            "ClassName": "WebServer6.StaticFilesHandler",
+            "Settings": {
+                "CacheExpirationMinutes": 5,
+                "WebRoot": "D:\\wwwroot"
+            }
+        },
+        {
+            "Path": "/api/*",
+            "Methods": [ "GET", "POST" ],
+            "HandlerType": "DynamicContent",
+            "AssemblyName": "StockQuotesAPI.dll",
+            "ClassName": "StockQuotesAPI.StockQuotesAPI",
+            "Settings": {
+                "DefaultResponseType": "application/json"
+            }
+        }
+    ],
+    "MiddlewareConfigs": [
+        {
+            "Name": "APIAuthentication",
+            "ClassName": "WebServer6.APIAuthenticationModule",
+            "Settings": {
+                "ApiKey": "UmaAPIKeyQueNinguemVaiQuererParaNada",
+                "Path": [  ]
+            }
+        },
+        {
+            "Name": "Compression",
+            "ClassName": "WebServer6.CompressionModule",
+            "Settings": {
+                "MinSizeToCompress": 1024
+            }
+        },
+        {
+            "Name": "RateLimiting",
+            "ClassName": "WebServer6.RateLimitingModule",
+            "Settings": {
+                "MaxRequestsPerMinute": 600000
+            }
+        }
+    ]
+}
