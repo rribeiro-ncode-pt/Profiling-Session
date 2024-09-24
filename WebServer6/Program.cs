@@ -16,6 +16,8 @@ using System.Reflection;
 using System.IO.Compression;
 using HandlerInterfaces;
 using MiddlewareInterfaces;
+using System.Timers;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace WebServer6
 {
@@ -150,15 +152,66 @@ namespace WebServer6
             response.Close();
         }
 
+        // Logging Engine
+
         private static Task LogAsync(string message)
         {
-            //Console.WriteLine($"{DateTime.UtcNow}: {message}");
+            logBuffer.Add($"{DateTime.UtcNow}: {message}");
             return Task.CompletedTask;
         }
 
+        private static ConcurrentBag<string> logBuffer = new ConcurrentBag<string>();
+        private static string logFilePath = $".\\logs\\server_log_{DateTime.Now.Ticks}.log";
+        private static System.Timers.Timer flushTimer = new System.Timers.Timer(5000);
+
         private static void StartLoggingEngine()
         {
+            if (!Path.Exists(".\\logs"))
+                Directory.CreateDirectory(".\\logs");
+            flushTimer.Elapsed += FlushLogBuffer;
+            flushTimer.AutoReset = true;
+            flushTimer.Enabled = true;
+        }
 
+        private static void StopLoggingEngine()
+        {
+            lock (logBuffer)
+            {
+                flushTimer.Stop();
+                flushTimer.Dispose();
+                File.AppendAllLines(logFilePath, logBuffer);
+            }
+        }
+
+        private static void Log(string clientIP, string userName, string requestMethod, string urlStem, string urlQuery, int status, int subStatus, int win32Status, double timeTaken)
+        {
+            string logEntry = $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} {clientIP} {userName} {requestMethod} {urlStem} {urlQuery} {status} {subStatus} {win32Status} {timeTaken}ms";
+            _ = Task.Run(() => {
+                lock (logBuffer)
+                    logBuffer.Add(logEntry);
+            });
+        }
+
+        private static long MaxLogFileSize = 200 * 1024 * 1024; // 200MB
+
+        private static void FlushLogBuffer(object? source, ElapsedEventArgs e)
+        {
+            try
+            {
+                if (File.Exists(logFilePath) && new FileInfo(logFilePath).Length >= MaxLogFileSize)
+                {
+                    logFilePath = $".\\logs\\server_log_{DateTime.Now.Ticks}.log";
+                }
+                lock (logBuffer)
+                {
+                    File.AppendAllLines(logFilePath, logBuffer);
+                    logBuffer.Clear(); // Clear the buffer after flushing
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error flushing log buffer: {ex.Message}");
+            }
         }
     }
 

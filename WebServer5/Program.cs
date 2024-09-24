@@ -249,7 +249,10 @@ internal class Program
     private static void Log(string clientIP, string userName, string requestMethod, string urlStem, string urlQuery, int status, int subStatus, int win32Status, double timeTaken)
     {
         string logEntry = $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} {clientIP} {userName} {requestMethod} {urlStem} {urlQuery} {status} {subStatus} {win32Status} {timeTaken}ms";
-        _ = Task.Run(() => logBuffer.Add(logEntry)); //log entry is added to the buffer in a separate thread
+        _ = Task.Run(() => {
+            lock (logBuffer)
+                logBuffer.Add(logEntry);
+        });
     }
 
     private static long MaxLogFileSize = 200 * 1024 * 1024; // 200MB

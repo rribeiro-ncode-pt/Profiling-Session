@@ -233,7 +233,9 @@ internal class Program
     private static void Log(string clientIP, string userName, string requestMethod, string urlStem, string urlQuery, int status, int subStatus, int win32Status, double timeTaken)
     {
         string logEntry = $"{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} {clientIP} {userName} {requestMethod} {urlStem} {urlQuery} {status} {subStatus} {win32Status} {timeTaken}ms";
-        _ = Task.Run(() => logBuffer.Add(logEntry)); //log entry is added to the buffer in a separate thread
+        _ = Task.Run(() => {
+            logBuffer.Add(logEntry);
+        });
     }
 
     private static long MaxLogFileSize = 200 * 1024 * 1024; // 200MB
@@ -242,16 +244,13 @@ internal class Program
     {
         try
         {
-            lock (logBuffer)
+            if (File.Exists(logFilePath) && new FileInfo(logFilePath).Length >= MaxLogFileSize)
             {
-                if (File.Exists(logFilePath) && new FileInfo(logFilePath).Length >= MaxLogFileSize)
-                {
-                    logFilePath = $".\\logs\\server_log_{DateTime.Now.Ticks}.log";
-                }
-
-                File.AppendAllLines(logFilePath, logBuffer);
-                logBuffer.Clear(); // Clear the buffer after flushing
+                logFilePath = $".\\logs\\server_log_{DateTime.Now.Ticks}.log";
             }
+
+            File.AppendAllLines(logFilePath, logBuffer);
+            logBuffer.Clear(); // Clear the buffer after flushing
         }
         catch (Exception ex)
         {
