@@ -41,6 +41,7 @@ The original developer of this prototype doesn't believe in config files, all se
 - **WebServer3**: Asynchronous implementation with `async/await` for improved I/O performance.
 - **WebServer4**: Utilizes `BlockingCollection` to manage a request queue and dedicated worker threads. 
 - **WebServer5**: Extends WebServer4 with cache headers for images.
+- **WebServer6**: A more advanced implementation with configuration support, middleware, and dynamic content handling.
 
 For 4 and 5 you can specify how many worker threads to use in the command line 
 ```powershell
@@ -48,6 +49,15 @@ For 4 and 5 you can specify how many worker threads to use in the command line
    PS C:\Projects\ProfileSession\WebServer5\bin\Release\net8.0> WebServer5.exe 8 <-- (number of worker threads)
 ```
 
+### WebServer6 Details
+
+WebServer6 introduces several improvements and new features:
+
+1. **Configuration Support**: Uses a JSON configuration file (`config.json`) for server settings, including ports, SSL configuration, and route definitions.
+2. **Middleware Support**: Implements a middleware pipeline for request processing, including sample authentication, compression, and rate limiting.
+3. **Dynamic Content Handling**: Supports both static file serving and dynamic content generation through configurable handlers.
+5. **SSL Support**: Configurable HTTPS support with certificate settings in the config file.
+6. **Extensibility**: Allows for easy addition of new request handlers and middleware through the configuration file.
 
 ## How to Run
 

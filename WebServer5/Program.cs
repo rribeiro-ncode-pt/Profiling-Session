@@ -7,7 +7,7 @@ using System.Timers;
 [DebuggerDisplay($"{{{nameof(GetDebuggerDisplay)}(),nq}}")]
 internal class Program
 {
-    private static int MaxThreads = 48;
+    private static int MaxThreads = 6;
     private static readonly int MaxQueueSize = 1000;
     private static readonly BlockingCollection<HttpListenerContext> RequestQueue =
         new BlockingCollection<HttpListenerContext>(new ConcurrentQueue<HttpListenerContext>(), MaxQueueSize);
@@ -42,13 +42,15 @@ internal class Program
     {
         if (args.Length > 0 && int.TryParse(args[0], out int maxThreads))
         {
-            MaxThreads = maxThreads;
+            MaxThreads = maxThreads > MaxThreads ? MaxThreads : maxThreads;
         }
         else
         {
             var cores = Environment.ProcessorCount;
-            MaxThreads = cores * 2;
+            maxThreads = cores * 2;
+            MaxThreads = maxThreads > MaxThreads ? MaxThreads : maxThreads;
         }
+
         SetupEventlog();
         StartLoggingEngine();
         HttpListener listener = new HttpListener();
@@ -106,7 +108,7 @@ internal class Program
         Stopwatch stopwatch = Stopwatch.StartNew();
         HttpListenerRequest request = context.Request;
         HttpListenerResponse response = context.Response;
-        string urlPath = request.Url.AbsolutePath;
+        string urlPath = request.Url?.AbsolutePath ?? string.Empty;
         if (urlPath.Length > 0 && urlPath[^1] == '/')
         {
             urlPath += "index.html";
@@ -118,14 +120,13 @@ internal class Program
         rootPath = Path.GetFullPath(rootPath);
         try
         {
-
             if (!localPath.StartsWith(rootPath, StringComparison.OrdinalIgnoreCase))
             {
                 SendErrorResponse(response, HttpStatusCode.Forbidden, "403 Forbidden");
                 return;
             }
 
-            if (FileCache.TryGetValue(localPath, out byte[] content) || File.Exists(localPath) && (content = File.ReadAllBytes(localPath)) != null)
+            if (FileCache.TryGetValue(localPath, out byte[]? content) || File.Exists(localPath) && (content = File.ReadAllBytes(localPath)) != null)
             {
                 FileCache[localPath] = content;
                 string contentType = GetContentType(localPath);
@@ -141,19 +142,20 @@ internal class Program
             {
                 SendErrorResponse(response, HttpStatusCode.NotFound, "404 Not Found");
             }
-            response.Close();
         }
         catch (Exception ex)
         {
-            Log(context.Request.RemoteEndPoint.Address.ToString(), "Anonymous", context.Request.HttpMethod, urlPath, context.Request.Url.Query, (int)HttpStatusCode.InternalServerError, -1, ex.HResult, stopwatch.Elapsed.TotalMilliseconds);
+            Log(context.Request.RemoteEndPoint?.Address.ToString() ?? "Unknown", "Anonymous", context.Request.HttpMethod, urlPath, context.Request.Url?.Query ?? string.Empty, (int)HttpStatusCode.InternalServerError, -1, ex.HResult, stopwatch.Elapsed.TotalMilliseconds);
             ReportError($"Error processing request: {ex.Message}");
             try
             {
                 SendErrorResponse(response, HttpStatusCode.InternalServerError, "500 Internal Server Error");
+                Log(context.Request.RemoteEndPoint?.Address.ToString() ?? "Unknown", "Anonymous", context.Request.HttpMethod, urlPath, context.Request.Url?.Query ?? string.Empty, (int)HttpStatusCode.InternalServerError, -1, ex.HResult, stopwatch.Elapsed.TotalMilliseconds);
                 response.Close();
             }
             catch (Exception ex2)
             {
+                Log(context.Request.RemoteEndPoint?.Address.ToString() ?? "Unknown", "Anonymous", context.Request.HttpMethod, urlPath, context.Request.Url?.Query ?? string.Empty, (int)HttpStatusCode.InternalServerError, -1, ex2.HResult, stopwatch.Elapsed.TotalMilliseconds);
                 response.Abort();
                 ReportError($"Error sending error response: {ex2.Message}");
             }
@@ -161,7 +163,6 @@ internal class Program
         finally
         {
             stopwatch.Stop();
-            Log(context.Request.RemoteEndPoint.Address.ToString(), "Anonymous", context.Request.HttpMethod, urlPath, context.Request.Url.Query, response.StatusCode, 0, 0, stopwatch.Elapsed.TotalMilliseconds);
         }
     }
 
